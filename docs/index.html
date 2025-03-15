@@ -23,6 +23,10 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        .text-primary {
+            color: var(--primary) !important;
+        }
+
         .navbar {
             background-color: var(--primary);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
@@ -167,22 +171,6 @@
             min-height: 100px;
         }
 
-        .hashtag-suggestion {
-            display: inline-block;
-            margin: 5px;
-            padding: 5px 10px;
-            background-color: var(--secondary);
-            border-radius: 20px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .hashtag-suggestion:hover {
-            background-color: var(--primary-light);
-            color: white;
-        }
-
         .character-count {
             font-size: 0.85rem;
             color: #777;
@@ -283,33 +271,9 @@
                                                 onclick="formatSelected('italic')">
                                                 <i class="fas fa-italic"></i>
                                             </button>
-
-                                        </div>
-
-                                        <!-- Structure formatting -->
-                                        <div class="btn-group mb-2 me-2">
-                                            <button class="btn btn-sm btn-outline-secondary" onclick="addLineBreaks()">
-                                                <i class="fas fa-grip-lines"></i> Add Line Breaks
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-secondary"
-                                                onclick="addBulletPoints()">
-                                                <i class="fas fa-list-ul"></i> Add Bullets
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-secondary"
-                                                onclick="addNumberedList()">
-                                                <i class="fas fa-list-ol"></i> Add Numbers
-                                            </button>
-                                        </div>
-
-                                        <!-- Special formatting -->
-                                        <div class="btn-group mb-2">
-                                            <button class="btn btn-sm btn-outline-secondary"
-                                                onclick="insertAtCursor('#')">
-                                                <i class="fas fa-hashtag"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-secondary"
-                                                onclick="insertAtCursor('@')">
-                                                <i class="fas fa-at"></i>
+                                            <button class="btn btn-sm btn-outline-primary"
+                                                onclick="formatSelected('boldItalic')">
+                                                <i class="fas fa-bold"></i><i class="fas fa-italic ms-1"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -360,7 +324,9 @@
                         <div class="font-style-preview">
                             <strong>Italic:</strong> <span id="italic-example">This is italic text</span>
                         </div>
-
+                        <div class="font-style-preview">
+                            <strong>Bold Italic:</strong> <span id="boldItalic-example">This is bold italic text</span>
+                        </div>
                     </div>
                 </div>
 
@@ -420,6 +386,14 @@
                 'e': '𝘦', 'f': '𝘧', 'g': '𝘨', 'h': '𝘩', 'i': '𝘪', 'j': '𝘫', 'k': '𝘬', 'l': '𝘭', 'm': '𝘮', 'n': '𝘯',
                 'o': '𝘰', 'p': '𝘱', 'q': '𝘲', 'r': '𝘳', 's': '𝘴', 't': '𝘵', 'u': '𝘶', 'v': '𝘷', 'w': '𝘸', 'x': '𝘹',
                 'y': '𝘺', 'z': '𝘻'
+            },
+            boldItalic: {
+                'A': '𝑨', 'B': '𝑩', 'C': '𝑪', 'D': '𝑫', 'E': '𝑬', 'F': '𝑭', 'G': '𝑮', 'H': '𝑯', 'I': '𝑰', 'J': '𝑱',
+                'K': '𝑲', 'L': '𝑳', 'M': '𝑴', 'N': '𝑵', 'O': '𝑶', 'P': '𝑷', 'Q': '𝑸', 'R': '𝑹', 'S': '𝑺', 'T': '𝑻',
+                'U': '𝑼', 'V': '𝑽', 'W': '𝑾', 'X': '𝑿', 'Y': '𝒀', 'Z': '𝒁', 'a': '𝒂', 'b': '𝒃', 'c': '𝒄', 'd': '𝒅',
+                'e': '𝒆', 'f': '𝒇', 'g': '𝒈', 'h': '𝒉', 'i': '𝒊', 'j': '𝒋', 'k': '𝒌', 'l': '𝒍', 'm': '𝒎', 'n': '𝒏',
+                'o': '𝒐', 'p': '𝒑', 'q': '𝒒', 'r': '𝒓', 's': '𝒔', 't': '𝒕', 'u': '𝒖', 'v': '𝒗', 'w': '𝒘', 'x': '𝒙',
+                'y': '𝒚', 'z': '𝒛'
             }
         };
 
@@ -454,6 +428,7 @@
         function initializeExamples() {
             document.getElementById('bold-example').textContent = formatTextWithMap("This is bold text", formatMaps.bold);
             document.getElementById('italic-example').textContent = formatTextWithMap("This is italic text", formatMaps.italic);
+            document.getElementById('boldItalic-example').textContent = formatTextWithMap("This is bold italic text", formatMaps.boldItalic);
         }
 
         // Format text with a given map
@@ -462,112 +437,6 @@
                 .split('')
                 .map(char => map[char] || char)
                 .join('');
-        }
-
-        // Insert text at the cursor position
-        function insertAtCursor(text) {
-            const textarea = document.getElementById('linkedin-input');
-            const cursorPos = textarea.selectionStart;
-            const beforeText = textarea.value.substring(0, cursorPos);
-            const afterText = textarea.value.substring(cursorPos);
-
-            textarea.value = beforeText + text + afterText;
-            textarea.selectionStart = textarea.selectionEnd = cursorPos + text.length;
-            textarea.focus();
-            updatePreview();
-            updateCharCount();
-        }
-
-        // Add line breaks
-        function addLineBreaks() {
-            const textarea = document.getElementById('linkedin-input');
-            const text = textarea.value;
-
-            // Replace long paragraphs with shorter ones
-            const sentences = text.split('. ');
-            const paragraphs = [];
-            let currentParagraph = '';
-
-            for (let i = 0; i < sentences.length; i++) {
-                let sentence = sentences[i];
-                if (i < sentences.length - 1) sentence += '.';
-
-                if (currentParagraph.length + sentence.length > 80 || i === sentences.length - 1) {
-                    if (currentParagraph) {
-                        paragraphs.push(currentParagraph.trim());
-                    }
-                    currentParagraph = sentence + ' ';
-                } else {
-                    currentParagraph += sentence + ' ';
-                }
-            }
-
-            // Add the last paragraph if it's not empty
-            if (currentParagraph.trim()) {
-                paragraphs.push(currentParagraph.trim());
-            }
-
-            textarea.value = paragraphs.join('\n\n');
-            updatePreview();
-            updateCharCount();
-        }
-
-        // Add bullet points
-        function addBulletPoints() {
-            const textarea = document.getElementById('linkedin-input');
-            const start = textarea.selectionStart;
-            const end = textarea.selectionEnd;
-
-            if (start === end) {
-                // No selection, apply to the whole text
-                const lines = textarea.value.split('\n');
-                const bulletedLines = lines.map(line => line.trim() ? '• ' + line : line);
-                textarea.value = bulletedLines.join('\n');
-            } else {
-                // Apply to selection only
-                const selectedText = textarea.value.substring(start, end);
-                const lines = selectedText.split('\n');
-                const bulletedLines = lines.map(line => line.trim() ? '• ' + line : line);
-
-                const beforeText = textarea.value.substring(0, start);
-                const afterText = textarea.value.substring(end);
-
-                textarea.value = beforeText + bulletedLines.join('\n') + afterText;
-            }
-
-            updatePreview();
-            updateCharCount();
-        }
-
-        // Add numbered list
-        function addNumberedList() {
-            const textarea = document.getElementById('linkedin-input');
-            const start = textarea.selectionStart;
-            const end = textarea.selectionEnd;
-
-            if (start === end) {
-                // No selection, apply to the whole text
-                const lines = textarea.value.split('\n');
-                const numberedLines = lines.map((line, index) =>
-                    line.trim() ? `${index + 1}. ${line}` : line
-                );
-                textarea.value = numberedLines.join('\n');
-            } else {
-                // Apply to selection only
-                const selectedText = textarea.value.substring(start, end);
-                const lines = selectedText.split('\n');
-                const numberedLines = lines.map((line, index) =>
-                    line.trim() ? `${index + 1}. ${line}` : line
-                );
-
-                const beforeText = textarea.value.substring(0, start);
-                const afterText = textarea.value.substring(end);
-
-                textarea.value = beforeText + numberedLines.join('\n') + afterText;
-            }
-
-            updatePreview();
-            updateCharCount();
         }
 
         // Update character count
