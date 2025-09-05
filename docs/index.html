@@ -264,21 +264,27 @@
                                         <!-- Text formatting options -->
                                         <div class="btn-group mb-2 me-2">
                                             <button class="btn btn-sm btn-outline-primary"
-                                                onclick="formatSelected('bold')">
+                                                onclick="formatSelected('bold')" title="Bold (Ctrl+B)">
                                                 <i class="fas fa-bold"></i>
                                             </button>
                                             <button class="btn btn-sm btn-outline-primary"
-                                                onclick="formatSelected('italic')">
+                                                onclick="formatSelected('italic')" title="Italic (Ctrl+I)">
                                                 <i class="fas fa-italic"></i>
                                             </button>
                                             <button class="btn btn-sm btn-outline-primary"
-                                                onclick="formatSelected('boldItalic')">
+                                                onclick="formatSelected('boldItalic')" title="Bold Italic (Ctrl+Shift+B)">
                                                 <i class="fas fa-bold"></i><i class="fas fa-italic ms-1"></i>
                                             </button>
                                         </div>
+                                        <div class="d-flex align-items-center ms-3">
+                                            <small class="text-muted">
+                                                <i class="fas fa-keyboard me-1"></i>
+                                                <strong>Keyboard shortcuts:</strong> Ctrl+B (Bold), Ctrl+I (Italic), Ctrl+Shift+B (Bold Italic)
+                                            </small>
+                                        </div>
                                     </div>
 
-                                    <textarea class="form-control rounded-top-0" id="linkedin-input" rows="8"
+                                    <textarea class="form-control rounded-top-0" id="linkedin-input" rows="18"
                                         placeholder="Enter your LinkedIn post here..."></textarea>
 
 
@@ -487,6 +493,25 @@
             document.getElementById('linkedin-input').addEventListener('input', function () {
                 updatePreview();
                 updateCharCount();
+            });
+
+            // Add keyboard shortcuts
+            document.getElementById('linkedin-input').addEventListener('keydown', function (e) {
+                // Ctrl+B for bold
+                if (e.ctrlKey && e.key === 'b' && !e.shiftKey) {
+                    e.preventDefault();
+                    formatSelected('bold');
+                }
+                // Ctrl+I for italic
+                else if (e.ctrlKey && e.key === 'i') {
+                    e.preventDefault();
+                    formatSelected('italic');
+                }
+                // Ctrl+Shift+B for bold italic
+                else if (e.ctrlKey && e.shiftKey && e.key === 'B') {
+                    e.preventDefault();
+                    formatSelected('boldItalic');
+                }
             });
 
             // Initialize examples
